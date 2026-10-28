@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { faqGroups, allFaqs } from '../data/faqs';
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: allFaqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })),
+};
+---
+<BaseLayout title="Часті запитання про агрокалькулятори, норми висіву й добрив" description="Відповіді на поширені питання українських фермерів: скільки насіння потрібно на гектар, як порахувати добрива, робочий розчин, пальне, площу та врожайність." path="/faq/" keywords={['питання про норму висіву', 'як порахувати добрива на гектар', 'скільки насіння на гектар', 'розрахунок робочого розчину', 'як порахувати гектари']} schema={faqSchema}>
+  <main id="main-content" class="page-shell">
+    <section class="page-intro">
+      <Breadcrumbs items={[{ label: 'Головна', href: '/' }, { label: 'Питання та відповіді' }]} />
+      <p class="eyebrow">Довідка</p>
+      <h1>Часті запитання про агророзрахунки</h1>
+      <p>Відповіді на практичні запити про норми висіву, кількість добрив, робочий розчин, витрату пального, площу поля, продуктивність техніки та врожайність.</p>
+    </section>
+    <div class="content-grid section-tight">
+      <div>
+        {faqGroups.map((group, groupIndex) => <section style="margin-bottom:2.1rem;">
+          <h2 style="font-size:1.3rem;color:#193e2b;margin:0 0 .85rem;">{group.title}</h2>
+          <div class="faq-list">
+            {group.items.map((faq) => <details class="faq-item"><summary>{faq.question}</summary><div class="faq-answer"><p>{faq.answer}</p></div></details>)}
+          </div>
+        </section>)}
+      </div>
+      <aside>
+        <div class="info-panel">
+          <h3>Швидкий перехід</h3>
+          <ul class="info-list">
+            <li><a href="/kalkulyatory/norma-vysivu/">Калькулятор норми висіву</a></li>
+            <li><a href="/kalkulyatory/norma-dobryv/">Калькулятор норми добрив</a></li>
+            <li><a href="/kalkulyatory/robochyi-rozchyn/">Розрахунок робочого розчину</a></li>
+            <li><a href="/kalkulyatory/ploshcha-polya/">Площа поля в гектарах</a></li>
+            <li><a href="/kalkulyatory/vytrata-palnoho/">Витрата пального на гектар</a></li>
+          </ul>
+        </div>
+        <div class="note-box" style="margin-top:1rem;">Якщо питання стосується конкретної норми висіву або внесення, використовуйте дані своєї партії, аналіз ґрунту та рекомендації виробника.</div>
+      </aside>
+    </div>
+  </main>
+</BaseLayout>

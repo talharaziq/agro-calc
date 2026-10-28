@@ -1,0 +1,13 @@
+{
+  "name": "Агро Калькулятори",
+  "short_name": "Агро Кальк",
+  "description": "Безкоштовні онлайн-калькулятори для аграрних розрахунків українською мовою.",
+  "lang": "uk-UA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf5",
+  "theme_color": "#183f2e",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

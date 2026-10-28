@@ -1,0 +1,23 @@
+---
+interface Item { label: string; href?: string }
+const { items = [] } = Astro.props as { items: Item[] };
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, Astro.site ?? 'https://agrocalculator.pp.ua').toString() } : {}),
+  })),
+};
+---
+<nav class="breadcrumbs" aria-label="Навігаційний шлях">
+  {items.map((item, index) => (
+    <>
+      {index > 0 && <span aria-hidden="true">/</span>}
+      {item.href && index < items.length - 1 ? <a href={item.href}>{item.label}</a> : <span aria-current={index === items.length - 1 ? 'page' : undefined}>{item.label}</span>}
+    </>
+  ))}
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)}></script>

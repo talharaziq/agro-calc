@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  keywords?: string[];
+  noindex?: boolean;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  type?: 'website' | 'article';
+  publishedTime?: string;
+}
+const { title, description, path = '/', keywords = [], noindex = false, schema, type = 'website', publishedTime } = Astro.props;
+const siteUrl = Astro.site ?? new URL('https://agrocalculator.pp.ua');
+const canonical = new URL(path, siteUrl).toString();
+const schemas = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Агро Калькулятори',
+    url: siteUrl.toString(),
+    logo: new URL('/favicon.svg', siteUrl).toString(),
+    description: 'Безкоштовні онлайн-калькулятори для аграрних розрахунків українською мовою.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Агро Калькулятори',
+    url: siteUrl.toString(),
+    inLanguage: 'uk-UA',
+  },
+  ...(schema ? (Array.isArray(schema) ? schema : [schema]) : []),
+];
+---
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183f2e" />
+    <meta name="color-scheme" content="light" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content={noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large'} />
+    <meta name="description" content={description} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" hreflang="uk-UA" href={canonical} />
+    <title>{title}</title>
+    <meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:site_name" content="Агро Калькулятори" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og-card.svg', siteUrl).toString()} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {schemas.map((entry) => <script type="application/ld+json" set:html={JSON.stringify(entry)}></script>)}
+    <script is:inline src="/scripts/site.js" defer></script>
+    <script is:inline src="/scripts/calculators.js" defer></script>
+  </head>
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import { tools } from '../../data/tools';
+const listSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Агрокалькулятори для фермерів',
+  description: 'Онлайн-калькулятори для норм висіву культур, добрив, робочої рідини, площі, води для поливу, витрати форсунок, зернових втрат, вологості, витрат і економіки господарства.',
+  mainEntity: { '@type': 'ItemList', itemListElement: tools.map((tool, i) => ({ '@type': 'ListItem', position: i + 1, name: tool.title, url: new URL(`/kalkulyatory/${tool.slug}/`, Astro.site ?? 'https://agrocalculator.pp.ua').toString() })) },
+};
+---
+<BaseLayout title="Усі агрокалькулятори онлайн — для посіву, добрив і витрат" description="26 безкоштовних агрокалькуляторів українською: норма висіву, добрива, робочий розчин, площа поля, витрата пального, продуктивність техніки, вартість добрив і врожайність." path="/kalkulyatory/" keywords={['агрокалькулятори онлайн', 'калькулятор для фермерів', 'калькулятори для сільського господарства', 'норми висіву та добрив']} schema={listSchema}>
+  <main id="main-content" class="page-shell">
+    <section class="page-intro">
+      <p class="breadcrumbs"><a href="/">Головна</a><span aria-hidden="true">/</span><span aria-current="page">Калькулятори</span></p>
+      <p class="eyebrow">Інструменти господарства</p>
+      <h1>Агрокалькулятори онлайн</h1>
+      <p>Знайдіть потрібний розрахунок для поля, посіву, удобрення, обприскування, техніки чи бюджету. Усі калькулятори працюють без реєстрації, показують формулу й допомагають перевірити введені арифметичні дані.</p>
+    </section>
+    <label class="search-field">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="search" data-tool-search name="tool-search" autocomplete="off" placeholder="Наприклад, норма висіву або пальне…" aria-label="Пошук калькулятора" />
+    </label>
+    <p class="search-count" data-tool-count aria-live="polite">Показано калькуляторів: {tools.length}</p>
+    <div class="tool-grid">
+      {tools.map((tool) => <ToolCard tool={tool} />)}
+    </div>
+    <p data-tool-empty hidden class="note-box" style="margin-top:1rem;">За цим запитом калькуляторів не знайдено. Спробуйте інше слово, наприклад «насіння», «пальне» або «площа».</p>
+
+    <section class="section content-grid">
+      <div class="prose">
+        <h2>Для яких задач підходять агрокалькулятори</h2>
+        <p>Онлайн-розрахунки допомагають перевести норму на гектар у загальну кількість для поля, оцінити потребу в насінні та добривах, підготувати робочий розчин або спланувати витрати на польові роботи. Це зручно, коли потрібно швидко перевірити арифметику перед закупівлею чи виїздом техніки.</p>
+        <p>Для якісного результату вводьте свої показники: дані партії насіння, відсоток діючої речовини з етикетки, фактичну площу та витрату агрегату. Прикладові значення у формах призначені лише для демонстрації.</p>
+      </div>
+      <aside class="info-panel">
+        <h3>Найчастіше шукають</h3>
+        <ul class="info-list">
+          <li><a href="/kalkulyatory/norma-vysivu/">Калькулятор норми висіву насіння онлайн</a></li>
+          <li><a href="/kalkulyatory/norma-dobryv/">Калькулятор добрив на гектар</a></li>
+          <li><a href="/kalkulyatory/robochyi-rozchyn/">Розрахунок робочого розчину</a></li>
+          <li><a href="/kalkulyatory/ploshcha-polya/">Калькулятор площі поля в гектарах</a></li>
+          <li><a href="/kalkulyatory/vytrata-palnoho/">Калькулятор витрати пального на гектар</a></li>
+        </ul>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>
