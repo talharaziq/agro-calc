@@ -29,3 +29,4 @@ For a Git-connected build, use build command `npm run build` and output director
 ## Accuracy and editorial notes
 
 Example values are demonstrations, not crop or application recommendations. Formula pages explain assumptions and limits; pesticide/fertilizer application rates are not prescribed. Do not present estimated query demand as measured search volume. Use Search Console queries and impressions after launch to refine SEO priorities.
+Deployment configuration updated for Cloudflare Pages.
