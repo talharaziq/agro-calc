@@ -2,7 +2,7 @@
 
 Багатосторінковий україномовний сайт для фермерів України на Astro, Tailwind CSS v4 і звичайному JavaScript. У каталозі 26 окремих калькуляторів із власними URL, метаданими, формулами та FAQ. Розрахунки виконуються у браузері; історія зберігається локально в браузері на пристрої.
 
-## Local development
+## Local development 
 
 Requirements: Node.js compatible with Astro 5 and npm.
 
