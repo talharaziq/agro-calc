@@ -1,32 +1,59 @@
-# Агро Калькулятори — Astro source
+# Розрахуй — українські онлайн-калькулятори
 
-Багатосторінковий україномовний сайт для фермерів України на Astro, Tailwind CSS v4 і звичайному JavaScript. У каталозі 26 окремих калькуляторів із власними URL, метаданими, формулами та FAQ. Розрахунки виконуються у браузері; історія зберігається локально в браузері на пристрої.
+Статичний сайт із 100 калькуляторами українською мовою. Усі обчислення виконуються у браузері. Серверної частини та сторонніх JavaScript-залежностей немає.
 
-## Local development 
+## Cloudflare Pages + GitHub
 
-Requirements: Node.js compatible with Astro 5 and npm.
+**Важливо:** вміст цього проєкту має лежати безпосередньо в корені GitHub-репозиторію. Після розпакування у корені мають бути `package.json`, `build.mjs`, `src/`, `public/` і `dist/`. Не завантажуйте цю теку всередині додаткової теки `ua-calculators`.
+
+Налаштуйте Cloudflare Pages:
+
+- Framework preset: `None`
+- Production branch: `main` (або ваша основна гілка)
+- Root directory: залиште порожнім / стандартним (`/`)
+- Build command: `npm run build`
+- Build output directory: `dist`
+
+Додайте змінну середовища `SITE_URL` для Production (і Preview, якщо потрібно), наприклад `https://your-domain.com`. Замініть адресу на власний домен без `/` у кінці. Після цього запустіть повторне розгортання.
+
+Файл `.node-version` фіксує Node.js 22 для збірки. Зовнішні npm-пакети проєкту не потрібні.
+
+## Локальний запуск
+
+Потрібен Node.js 22 або новіший.
 
 ```bash
-npm install
-npm run dev
+npm run build
+npm run serve
 ```
 
-Build static output: `npm run build`. Astro writes production files to `dist/`. The static `public/robots.txt` points to the Astro sitemap index.
+Після запуску відкрийте `http://localhost:4173/`.
 
-## Cloudflare Pages
+## Структура
 
-For a Git-connected build, use build command `npm run build` and output directory `dist`. The production domain configured in metadata is `https://agrocalculator.pp.ua`; add it under **Workers & Pages → your Pages project → Custom domains** and configure DNS in the owner account. Do not rely on a DNS record alone without associating the domain with the Pages project.
+- `package.json` — команди збірки та локального перегляду.
+- `src/catalog.json` — категорії, 100 калькуляторів, назви, ключові фрази, SEO title/description, формули, приклади, поля та FAQ.
+- `public/app.js` — логіка розрахунків і пошук у каталозі.
+- `public/site.css` — адаптивний дизайн.
+- `build.mjs` — генерація статичних HTML-сторінок та SEO-метаданих.
+- `dist/` — згенерований сайт для публікації.
+- `make_catalog.py` — скрипт, яким створювався початковий каталог.
 
-## Account-specific launch steps
+## SEO
 
-- Verify the domain and DNS routing to the correct Pages project.
-- Enable Cloudflare Web Analytics from the owner's Cloudflare dashboard and confirm actual data collection.
-- Apply for Google AdSense from the owner account and wait for review. Do not publish an invented publisher ID or an `ads.txt` entry; use only the real ID supplied by Google after account setup.
-- Create a Google Search Console Domain property, complete the DNS verification, then submit the deployed sitemap.
-- Review privacy / cookie disclosures after the analytics and advertising services are actually active.
-- Test the live site on mobile, check all calculator results and mailto link, and re-submit the sitemap after deployment.
+Кожна сторінка калькулятора має окремі українські `title`, `meta description`, основний запит, H1, вступ, формулу, приклад, інструкцію, FAQ та внутрішні посилання на суміжні інструменти. HTML-сторінки генеруються заздалегідь, тому основний текст і посилання доступні пошуковим роботам без виконання JavaScript.
 
-## Accuracy and editorial notes
+На сторінках калькуляторів розміщено структуровані дані `SoftwareApplication` і `FAQPage`; для сторінок із доменом додається `BreadcrumbList`. Для головної, категорій та службових сторінок також створюються окремі title і description.
 
-Example values are demonstrations, not crop or application recommendations. Formula pages explain assumptions and limits; pesticide/fertilizer application rates are not prescribed. Do not present estimated query demand as measured search volume. Use Search Console queries and impressions after launch to refine SEO priorities.
-Deployment configuration updated for Cloudflare Pages.
+## Додавання калькулятора
+
+1. Додайте запис до масиву `calculators` у `src/catalog.json`. Вкажіть унікальний `slug`, `type`, українську назву, категорію, поля, формулу, приклад, FAQ та SEO-текст.
+2. Реалізуйте відповідний `type` у `public/app.js` — у секції обробки калькуляторів.
+3. Запустіть `npm run build` і перевірте нову сторінку в `dist/calculators/<slug>/`.
+
+## Важливі обмеження
+
+- У каталозі немає підключення до живих курсів валют. Курс вводить відвідувач.
+- Ставки та тарифи, які можна змінювати у формі, потрібно перевіряти перед використанням. Це стосується податків, банківських пропозицій, електроенергії та інших регульованих значень.
+- Калькулятори здоров'я дають довідкові оцінки, а не медичні висновки.
+- Сайт не містить аналітики, рекламних скриптів або форми облікового запису. Значення калькуляторів обробляються на пристрої відвідувача.
